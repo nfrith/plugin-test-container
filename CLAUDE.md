@@ -1,4 +1,4 @@
-# plugin-testbed
+# plugin-test-container
 
 Clean throwaway container for testing Claude Code plugins from an operator's perspective — no prior state, no host contamination.
 
@@ -25,12 +25,12 @@ It is intentionally generic — it knows nothing about any specific plugin. Buil
 
 **Build:**
 ```bash
-docker build -t plugin-testbed .
+docker build -t plugin-test-container .
 ```
 
 **Run:**
 ```bash
-docker run -it --rm plugin-testbed
+docker run -it --rm plugin-test-container
 ```
 
 The `--rm` flag throws the container away on exit — that's the point. Fresh state every time.
