@@ -13,7 +13,7 @@ It is intentionally generic — it knows nothing about any specific plugin. Buil
 - Ubuntu Noble (24.04) base
 - Claude Code (pre-installed via the native installer, PATH configured)
 - `git`, `curl`, `jq`
-- Non-root `operator` user
+- Non-root `tester` user
 
 ## What's NOT included
 
