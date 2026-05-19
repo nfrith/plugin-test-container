@@ -1,0 +1,14 @@
+FROM plugin-test-container:latest
+
+USER root
+
+# d2 — hard dependency of the visualize plugin. The official installer
+# runs `make install` to copy files to /usr/local/bin, so make is needed
+# during the build (kept in the variant, not the base).
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends make && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://d2lang.com/install.sh | bash -s --
+
+USER tester

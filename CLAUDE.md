@@ -12,6 +12,7 @@ It is intentionally generic — it knows nothing about any specific plugin. Buil
 
 - Ubuntu Noble (24.04) base
 - Claude Code (pre-installed via the native installer, PATH configured)
+- `bun` (common runtime for MCP-server plugins; on PATH for both interactive shells and Claude-spawned subprocesses)
 - `git`, `curl`, `jq`
 - Non-root `tester` user
 
@@ -53,4 +54,27 @@ For full microVM-grade isolation, Docker Sandboxes exist but currently require D
 
 ## Variants
 
-If a specific plugin needs a heavier base (Node, Python, etc.), fork this image and add the toolchain on top of the existing layers. Do not bake plugin-specific tooling into this image — it's meant to stay minimal.
+Plugin-specific runtime dependencies live in variant Dockerfiles that build `FROM plugin-test-container`. Keep the base minimal; let each variant carry its own extras.
+
+### `:visualize` — for testing nf-visualize
+
+Adds `d2` (hard dependency of the visualize plugin). Build:
+
+```bash
+docker build -t plugin-test-container:visualize -f Dockerfile.visualize .
+```
+
+Run:
+
+```bash
+docker run -it --rm plugin-test-container:visualize
+```
+
+### Adding a new variant
+
+1. Create `Dockerfile.<plugin>` in this repo with `FROM plugin-test-container:latest`
+2. Switch to `USER root`, install whatever the plugin needs, switch back to `USER tester`
+3. Tag the build with `:<plugin>` (e.g. `plugin-test-container:somecanvas`)
+4. Document it under "Variants" above
+
+Do not move plugin-specific binaries (d2, language toolchains, plugin-only services) into the base Dockerfile. The base stays generic.
